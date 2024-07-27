@@ -2,6 +2,7 @@
 -- List of all default plugins & their definitions
 local default_plugins = {
 
+  "nvim-neotest/nvim-nio",
   "nvim-lua/plenary.nvim",
   "fatih/vim-go",
   {

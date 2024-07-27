@@ -1,10 +1,57 @@
-local overrides = require("custom.configs.overrides")
+local overrides = require "custom.configs.overrides"
 
 ---@type NvPluginSpec[]
 local plugins = {
 
   -- Override plugin definition options
-
+  {
+    "cdelledonne/vim-cmake",
+    ft = { "c", "cpp" }, -- Load only for C/C++ files
+    config = function()
+      -- Optional configuration for vim-cmake
+      vim.g.cmake_build_dir = 'build'
+      vim.g.cmake_build_type = 'Debug'
+      vim.g.cmake_generate_options = { '-D', 'CMAKE_EXPORT_COMPILE_COMMANDS=1' }
+      vim.g.cmake_build_options = { '-j8' }
+      vim.g.cmake_command = 'cmake' -- Customize the cmake command if necessary
+    end,
+  },
+  {
+    "rcarriga/nvim-dap-ui",
+    event = "VeryLazy",
+    dependencies = "mfussenegger/nvim-dap",
+    config = function()
+      local dap = require "dap"
+      local dapui = require "dapui"
+      dapui.setup()
+      dap.listeners.after.event_initialized["dapui_config"] = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated["dapui_config"] = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited["dapui_config"] = function()
+        dapui.close()
+      end
+    end,
+  },
+  {
+    "jay-babu/mason-nvim-dap.nvim",
+    event = "VeryLazy",
+    dependencies = {
+      "williamboman/mason.nvim",
+      "mfussenegger/nvim-dap",
+    },
+    opts = {
+      handlers = {},
+    },
+  },
+  {
+    "mfussenegger/nvim-dap",
+    config = function(_, _)
+      require("core.utils").load_mappings "dap"
+    end,
+  },
   {
     "neovim/nvim-lspconfig",
     config = function()
@@ -16,7 +63,7 @@ local plugins = {
   -- override plugin configs
   {
     "williamboman/mason.nvim",
-    opts = overrides.mason
+    opts = overrides.mason,
   },
 
   {
@@ -46,6 +93,10 @@ local plugins = {
       require "custom.configs.conform"
     end,
   },
+
+  {
+    "cdelledonne/vim-cmake",
+  }
 
   -- To make a plugin not be loaded
   -- {
