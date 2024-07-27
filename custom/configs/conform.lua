@@ -10,6 +10,7 @@ local options = {
 		html = { "prettier" },
     python = {"black"},
 		sh = { "shfmt" },
+    cpp = {"clang-format"},
 	},
 
   -- adding same formatter for multiple filetypes can look too much work for some
