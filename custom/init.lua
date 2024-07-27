@@ -6,3 +6,4 @@
 --   command = "tabdo wincmd =",
 -- })
 vim.wo.relativenumber = true
+vim.g.nvim_tree_respect_buf_cwd = 1
